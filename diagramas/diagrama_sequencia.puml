@@ -1,0 +1,39 @@
+@startuml
+title Agendar um serviço para um veículo - Diagrama de Sequência
+
+actor Usuario
+boundary TelaAgenda
+control ControladorAgendamento
+control ServicoAgendamento
+entity Veiculo
+entity TipoServico
+entity Agendamento
+
+Usuario -> TelaAgenda : Seleciona veículo, serviço e data/hora
+Usuario -> TelaAgenda : Clica em "Agendar"
+TelaAgenda -> ControladorAgendamento : evento do botão Agendar
+ControladorAgendamento -> TelaAgenda : obter veículo selecionado
+TelaAgenda --> ControladorAgendamento : Veiculo
+ControladorAgendamento -> TelaAgenda : obter serviço selecionado
+TelaAgenda --> ControladorAgendamento : TipoServico
+ControladorAgendamento -> TelaAgenda : obter data/hora
+TelaAgenda --> ControladorAgendamento : LocalDateTime
+
+ControladorAgendamento -> ServicoAgendamento : agendar(veiculo, serviço, dataHora)
+ServicoAgendamento -> ServicoAgendamento : validar dados e verificar conflito
+
+alt Horário disponível
+  create Agendamento
+  ServicoAgendamento -> Agendamento : criar novo agendamento
+  ServicoAgendamento --> ControladorAgendamento : agendamento criado
+  ControladorAgendamento -> ServicoAgendamento : listarTodos()
+  ServicoAgendamento --> ControladorAgendamento : lista de agendamentos
+  ControladorAgendamento -> TelaAgenda : exibirAgendamentos(lista)
+  ControladorAgendamento -> TelaAgenda : mostrar confirmação
+  TelaAgenda --> Usuario : Agendamento realizado
+else Horário ocupado ou dados inválidos
+  ServicoAgendamento --> ControladorAgendamento : lançar erro de validação
+  ControladorAgendamento -> TelaAgenda : mostrar mensagem de erro
+  TelaAgenda --> Usuario : Solicitar correção dos dados/horário
+end
+@enduml

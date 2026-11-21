@@ -1,4 +1,3 @@
-# SistemaDeGestaoDeLavaRapido[README.md](https://github.com/user-attachments/files/35176481/README.md)
 # Sistema de Controle de Clientes e Agenda — Lava Rápido
 
 Aplicação desktop em Java Swing, organizada no padrão MVC.
